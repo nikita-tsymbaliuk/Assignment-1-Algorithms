@@ -167,5 +167,63 @@ namespace ConsoleApp7
             Console.WriteLine("Приклад у постфіксному записі : " + output); 
             return output; 
         }
+        
+        static private double CalculateFunc(string input)
+        {
+            double result = 0; 
+            MyDoubleStack resultStack = new MyDoubleStack(); 
+
+            for (int i = 0; i < input.Length; i++) 
+            {
+                
+                if (Char.IsDigit(input[i]))
+                {
+                    string bufferString = "";
+
+                    while (!isDelimeter(input[i]) && !isOperator(input[i])) 
+                    {
+                        bufferString += input[i]; 
+                        i++;
+                        if (i == input.Length) break;
+                    }
+                    resultStack.Push(double.Parse(bufferString)); 
+                    i--;
+                }
+                else if (isOperator(input[i])) 
+                {
+                    
+                    double firstNum = resultStack.Pop();
+                    double secondNum = resultStack.Pop();
+
+                    switch (input[i]) 
+                    {
+                        case '+': result = secondNum + firstNum; break;
+                        case '-': result = secondNum - firstNum; break;
+                        case '*': result = secondNum * firstNum; break;
+                        case '/': result = secondNum / firstNum; break;
+                        case '^': result = double.Parse(Math.Pow(double.Parse(secondNum.ToString()), double.Parse(firstNum.ToString())).ToString()); break;
+                    }
+                    resultStack.Push(result); 
+                }
+            }
+            return resultStack.Peek(); 
+        }
+
+    }
+
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Введіть вираз : ");
+            Console.WriteLine(Rpn.Calculate(Console.ReadLine()));
+            Console.WriteLine("Щоб вийти з програми, натисніть ENTER");
+            Console.ReadLine();
+        }
+    }
+}
+        
+        
     
     
