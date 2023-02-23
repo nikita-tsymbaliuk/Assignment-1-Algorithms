@@ -95,6 +95,77 @@ namespace ConsoleApp7
                 case '^': return 5;
                 default: return 6;
             }
-        }    
+        }
+        //Метод проведення всіх операцій калькулятора
+        static public double Calculate(string input)
+        {
+            return CalculateFunc(GetPolishOutput(input)); 
+        }
+
+        static private string GetPolishOutput(string input)
+        {
+            string output = ""; 
+            MyCharStack operatorsStack = new MyCharStack(); 
+
+            for (int i = 0; i < input.Length; i++) 
+            {
+                
+                if (isDelimeter(input[i]))
+                    continue; 
+
+                
+                if (Char.IsDigit(input[i])) 
+                {
+                   
+                    while (!isDelimeter(input[i]) && !isOperator(input[i]))
+                    {
+                        Console.Write(input[i] + "|");
+                        output += input[i]; 
+                        i++; 
+
+                        if (i == input.Length) break; 
+                    }
+
+                    output += " "; 
+                    i--; 
+                }
+
+                
+                if (isOperator(input[i])) 
+                {
+                    Console.Write(input[i] + "|");
+                    if (input[i] == '(') 
+                        operatorsStack.Push(input[i]); 
+                    else if (input[i] == ')') 
+                    {
+                        
+                        char stringWithOps = operatorsStack.Pop();
+
+                        while (stringWithOps != '(')
+                        {
+                            output += stringWithOps.ToString() + ' ';
+                            stringWithOps = operatorsStack.Pop();
+                        }
+                    }
+                    else 
+                    {
+                        if (operatorsStack.Count() > 0) 
+                            if (priorityOfOperators(input[i]) <= priorityOfOperators(operatorsStack.Peek())) 
+                                output += operatorsStack.Pop().ToString() + " "; 
+
+                        operatorsStack.Push(char.Parse(input[i].ToString())); 
+
+                    }
+                }
+            }
+
+            
+            while (operatorsStack.Count() > 0)
+                output += operatorsStack.Pop() + " ";
+
+            Console.WriteLine();
+            Console.WriteLine("Приклад у постфіксному записі : " + output); 
+            return output; 
+        }
     
     
