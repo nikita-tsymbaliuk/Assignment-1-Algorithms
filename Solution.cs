@@ -32,3 +32,35 @@ namespace ConsoleApp7
         }
     
     }
+    
+    
+    class MyDoubleStack // Клас стека double для всіх розрахунків
+    {
+        LinkedList<double> _items = new LinkedList<double>();
+
+
+        public void Push(double value)
+        {
+            _items.AddLast(value);
+        }
+
+        public double Pop()
+        {
+            double result = _items.Last.Value;
+            _items.RemoveLast();
+            return result;
+        }
+        public int Count()
+        {
+            return _items.Count;
+        }
+
+        public double Peek()
+        {
+            return _items.Last.Value;
+        }
+
+    }
+    
+    
+    
